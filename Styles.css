@@ -1,0 +1,88 @@
+/* styles.css */
+
+/* Smooth Animations */
+.key-press {
+  transition: transform 0.2s ease-in-out;
+}
+
+.key-press:active {
+  transform: scale(0.95);
+}
+
+.reset-button {
+  transition: background-color 0.3s ease;
+}
+
+.reset-button:hover {
+  background-color: #ddd;
+}
+
+.key-display {
+  transition: opacity 0.3s ease;
+}
+
+.key-display.show {
+  opacity: 1;
+}
+
+/* Responsive Layout */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.key-area {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.key {
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .key {
+    padding: 10px;
+  }
+}
+
+/* Dark Mode */
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.key.dark-mode {
+  background-color: #333;
+  color: #fff;
+  border-color: #555;
+}
+
+/* Accessibility Enhancements */
+body {
+  color: #000;
+  background-color: #fff;
+}
+
+.key {
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #000;
+}
+
+.dark-mode .key {
+  background-color: #000;
+  color: #fff;
+}
