@@ -14,33 +14,61 @@
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 50px;
-            background-color: #f0f0f0;
+            background-color: #e0f7fa;
+            margin: 0;
+            color: #333;
         }
         h1 {
-            color: #333;
+            color: #00796b;
+            font-size: 36px;
+        }
+        p {
+            font-size: 18px;
         }
         .key {
             display: inline-block;
             padding: 20px;
             margin: 10px;
-            background-color: #ddd;
+            background-color: #80cbc4;
             border-radius: 5px;
-            font-size: 20px;
+            font-size: 24px;
             color: #333;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
         .key.pressed {
-            background-color: #4CAF50;
+            background-color: #00796b;
             color: white;
+            transform: scale(1.1);
+        }
+        .key:hover {
+            background-color: #004d40;
+            cursor: pointer;
         }
         .output {
             margin-top: 30px;
-            font-size: 30px;
+            font-size: 24px;
             font-weight: bold;
+            color: #004d40;
         }
         .modifier-info {
-            font-size: 16px;
+            font-size: 18px;
             margin-top: 10px;
+            color: #00796b;
+        }
+        .reset-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff7043;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .reset-btn:hover {
+            background-color: #d32f2f;
         }
     </style>
 </head>
@@ -55,15 +83,18 @@
 
     <div class="modifier-info" id="modifierInfo" aria-label="Modifier Keys Information"></div>
 
+    <button class="reset-btn" id="resetButton">Reset</button>
+
     <script>
         const keyDisplay = document.getElementById('keyDisplay');
         const keyOutput = document.getElementById('keyOutput');
         const modifierInfo = document.getElementById('modifierInfo');
+        const resetButton = document.getElementById('resetButton');
 
         // Event listener to capture key press
         window.addEventListener('keydown', function(event) {
             keyDisplay.textContent = `You pressed: ${event.key}`;
-            keyOutput.textContent = `Key: ${event.key} (Code: ${event.keyCode})`;
+            keyOutput.textContent = `Key: ${event.key} (Code: ${event.code})`;
             keyDisplay.classList.add('pressed');
 
             // Display modifier key information
@@ -78,6 +109,14 @@
 
         // Event listener to reset the key display when key is released
         window.addEventListener('keyup', function(event) {
+            keyDisplay.classList.remove('pressed');
+        });
+
+        // Reset button functionality
+        resetButton.addEventListener('click', function() {
+            keyDisplay.textContent = "Press a Key";
+            keyOutput.textContent = "";
+            modifierInfo.textContent = "No modifiers pressed";
             keyDisplay.classList.remove('pressed');
         });
     </script>
