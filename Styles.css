@@ -1,6 +1,4 @@
-/* styles.css */
-
-/* Smooth Animations */
+/* Add this to your CSS file */
 .key-press {
   transition: transform 0.2s ease-in-out;
 }
@@ -23,9 +21,7 @@
 
 .key-display.show {
   opacity: 1;
-}
-
-/* Responsive Layout */
+}/* Add this to your CSS file */
 .container {
   display: flex;
   flex-direction: column;
@@ -56,9 +52,7 @@
   .key {
     padding: 10px;
   }
-}
-
-/* Dark Mode */
+}/* Add this to your CSS file */
 body.dark-mode {
   background-color: #121212;
   color: #ffffff;
@@ -68,20 +62,12 @@ body.dark-mode {
   background-color: #333;
   color: #fff;
   border-color: #555;
-}
-
-/* Accessibility Enhancements */
-body {
-  color: #000;
-  background-color: #fff;
-}
-
+}/* Update your CSS file */
 .key {
   background-color: #fff;
   color: #000;
   border: 2px solid #000;
 }
-
 .dark-mode .key {
   background-color: #000;
   color: #fff;
