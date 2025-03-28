@@ -1,41 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Keyboard Tester</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="container">
-    <div class="key-area">
-      <!-- Key elements will go here -->
-    </div>
-    <button class="reset-button">Reset</button>
-    <label class="switch">
-      <input type="checkbox" id="darkModeToggle">
-      <span class="slider"></span>
-    </label>
-  </div>
-  <div role="status" aria-live="polite" id="keyPressStatus"></div>
-
-  <script>
-    // Dark Mode Toggle
-    document.getElementById('darkModeToggle').addEventListener('change', function() {
-      document.body.classList.toggle('dark-mode', this.checked);
-    });
-
-    // Key Press Simulation
-    document.querySelectorAll('.key').forEach(key => {
-      key.addEventListener('click', function() {
-        console.log(this.textContent);
-      });
-    });
-
-    // Key Press Feedback
-    document.addEventListener('keydown', function(event) {
-      document.getElementById('keyPressStatus').textContent = `Key ${event.key} pressed`;
-    });
-  </script>
-</body>
-</html>
+<!-- Add this to your HTML file -->
+<label class="switch">
+  <input type="checkbox" id="darkModeToggle">
+  <span class="slider"></span>
+</label>
+<script>
+document.getElementById('darkModeToggle').addEventListener('change', function() {
+  document.body.classList.toggle('dark-mode', this.checked);
+});
+</script><!-- Add this to your HTML file -->
+<div class="virtual-keyboard">
+  <button class="key">A</button>
+  <button class="key">B</button>
+  <!-- Add buttons for all keys -->
+</div>
+<script>
+document.querySelectorAll('.virtual-keyboard .key').forEach(key => {
+  key.addEventListener('click', function() {
+    // Simulate key press
+    console.log(this.textContent);
+  });
+});
+</script><!-- Add ARIA roles and properties -->
+<div role="status" aria-live="polite" id="keyPressStatus"></div>
+<script>
+document.addEventListener('keydown', function(event) {
+  document.getElementById('keyPressStatus').textContent = `Key ${event.key} pressed`;
+});
+</script><!-- Add this to your HTML file -->
+<div>
+  <label for="keyInfoDisplay">Display key information:</label>
+  <select id="keyInfoDisplay">
+    <option value="on">On</option>
+    <option value="off">Off</option>
+  </select>
+</div>
+<script>
+document.getElementById('keyInfoDisplay').addEventListener('change', function() {
+  const display = this.value === 'on';
+  // Update key information display logic
+});
+</script>
