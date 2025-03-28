@@ -1,164 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KeyTester</title>
-
-    <!-- Apache License 2.0 -->
-    <!-- Copyright [2025] [Code3rr0r] -->
-    <!-- Licensed under the Apache License, Version 2.0 -->
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 5% 10%;
-            background-color: #e0f7fa;
-            margin: 0;
-            color: #333;
-        }
-        h1 {
-            color: #00796b;
-            font-size: 3em;
-        }
-        p {
-            font-size: 1.2em;
-        }
-        .key {
-            display: inline-block;
-            padding: 20px;
-            margin: 10px;
-            background-color: #80cbc4;
-            border-radius: 5px;
-            font-size: 2em;
-            color: #333;
-            transition: background-color 0.3s ease, transform 0.1s ease;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .key.pressed {
-            background-color: #00796b;
-            color: white;
-            transform: scale(1.1);
-        }
-        .key:hover {
-            background-color: #004d40;
-            cursor: pointer;
-        }
-        .output {
-            margin-top: 30px;
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #004d40;
-        }
-        .modifier-info {
-            font-size: 1.2em;
-            margin-top: 10px;
-            color: #00796b;
-        }
-        .reset-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #ff7043;
-            color: white;
-            font-size: 1.2em;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .reset-btn:hover {
-            background-color: #d32f2f;
-        }
-
-        /* Make the key size and layout responsive */
-        @media (max-width: 768px) {
-            .key {
-                font-size: 1.5em;
-                padding: 15px;
-            }
-            .output {
-                font-size: 1.3em;
-            }
-            .modifier-info {
-                font-size: 1.1em;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2.5em;
-            }
-            .key {
-                font-size: 1.2em;
-                padding: 12px;
-            }
-            .output {
-                font-size: 1.2em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyboard Tester</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="container">
+    <div class="key-area">
+      <!-- Key elements will go here -->
+    </div>
+    <button class="reset-button">Reset</button>
+    <label class="switch">
+      <input type="checkbox" id="darkModeToggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+  <div role="status" aria-live="polite" id="keyPressStatus"></div>
 
-    <h1>KeyTester</h1>
-    <p>Press any key on your keyboard or tap a key below:</p>
+  <script>
+    // Dark Mode Toggle
+    document.getElementById('darkModeToggle').addEventListener('change', function() {
+      document.body.classList.toggle('dark-mode', this.checked);
+    });
 
-    <div class="key" id="keyDisplay" role="status" aria-live="polite" aria-label="Key Display">Press a Key</div>
+    // Key Press Simulation
+    document.querySelectorAll('.key').forEach(key => {
+      key.addEventListener('click', function() {
+        console.log(this.textContent);
+      });
+    });
 
-    <div class="output" id="keyOutput" role="status" aria-live="polite"></div>
-
-    <div class="modifier-info" id="modifierInfo" aria-label="Modifier Keys Information"></div>
-
-    <button class="reset-btn" id="resetButton">Reset</button>
-
-    <script>
-        const keyDisplay = document.getElementById('keyDisplay');
-        const keyOutput = document.getElementById('keyOutput');
-        const modifierInfo = document.getElementById('modifierInfo');
-        const resetButton = document.getElementById('resetButton');
-
-        // Event listener to capture key press
-        window.addEventListener('keydown', function(event) {
-            keyDisplay.textContent = `You pressed: ${event.key}`;
-            keyOutput.textContent = `Key: ${event.key} (Code: ${event.code})`;
-            keyDisplay.classList.add('pressed');
-
-            // Display modifier key information
-            let modifiers = [];
-            if (event.shiftKey) modifiers.push("Shift");
-            if (event.ctrlKey) modifiers.push("Ctrl");
-            if (event.altKey) modifiers.push("Alt");
-            if (event.metaKey) modifiers.push("Meta");
-
-            modifierInfo.textContent = modifiers.length ? `Modifiers: ${modifiers.join(", ")}` : "No modifiers pressed";
-        });
-
-        // Event listener to reset the key display when key is released
-        window.addEventListener('keyup', function(event) {
-            keyDisplay.classList.remove('pressed');
-        });
-
-        // Reset button functionality
-        resetButton.addEventListener('click', function() {
-            keyDisplay.textContent = "Press a Key";
-            keyOutput.textContent = "";
-            modifierInfo.textContent = "No modifiers pressed";
-            keyDisplay.classList.remove('pressed');
-        });
-
-        // Mobile touch events (simulate keypresses for touch users)
-        keyDisplay.addEventListener('touchstart', function(event) {
-            keyDisplay.classList.add('pressed');
-            keyDisplay.textContent = "You tapped a key!";
-            keyOutput.textContent = "Key: Touch (Code: N/A)";
-            modifierInfo.textContent = "No modifiers pressed";
-        });
-
-        keyDisplay.addEventListener('touchend', function(event) {
-            keyDisplay.classList.remove('pressed');
-        });
-    </script>
-
+    // Key Press Feedback
+    document.addEventListener('keydown', function(event) {
+      document.getElementById('keyPressStatus').textContent = `Key ${event.key} pressed`;
+    });
+  </script>
 </body>
 </html>
