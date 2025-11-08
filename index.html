@@ -12,13 +12,11 @@
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 50px;
-            background-color: #f0f0f0;
             background-color: #e0f7fa;
             margin: 0;
             color: #333;
         }
         h1 {
-            color: #333;
             color: #00796b;
             font-size: 36px;
         }
@@ -29,18 +27,14 @@
             display: inline-block;
             padding: 20px;
             margin: 10px;
-            background-color: #ddd;
             background-color: #80cbc4;
             border-radius: 5px;
-            font-size: 20px;
             font-size: 24px;
             color: #333;
-            transition: background-color 0.3s;
             transition: background-color 0.3s ease, transform 0.1s ease;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
         .key.pressed {
-            background-color: #4CAF50;
             background-color: #00796b;
             color: white;
             transform: scale(1.1);
@@ -51,13 +45,11 @@
         }
         .output {
             margin-top: 30px;
-            font-size: 30px;
             font-size: 24px;
             font-weight: bold;
             color: #004d40;
         }
         .modifier-info {
-            font-size: 16px;
             font-size: 18px;
             margin-top: 10px;
             color: #00796b;
@@ -76,52 +68,91 @@
         .reset-btn:hover {
             background-color: #d32f2f;
         }
+        .key-log {
+            margin-top: 30px;
+            font-size: 16px;
+            color: #00695c;
+            word-wrap: break-word;
+        }
     </style>
 </head>
 <body>
     <h1>KeyTester</h1>
     <p>Press any key on your keyboard to see it displayed below:</p>
-    <div class="key" id="keyDisplay" role="status" aria-live="polite" aria-label="Key Display">Press a Key</div>
-    <div class="output" id="keyOutput" role="status" aria-live="polite"></div>
 
-    <div class="modifier-info" id="modifierInfo" aria-label="Modifier Keys Information"></div>
-
+    <div class="key" id="keyDisplay" role="status" aria-live="assertive" aria-label="Key Display">Press a Key</div>
+    <div class="output" id="keyOutput" role="status" aria-live="assertive"></div>
+    <div class="modifier-info" id="modifierInfo" aria-label="Modifier Keys Information">No modifiers pressed</div>
     <button class="reset-btn" id="resetButton">Reset</button>
+
+    <div class="key-log" id="keyLog">Key Sequence: (none yet)</div>
 
     <script>
         const keyDisplay = document.getElementById('keyDisplay');
         const keyOutput = document.getElementById('keyOutput');
         const modifierInfo = document.getElementById('modifierInfo');
         const resetButton = document.getElementById('resetButton');
+        const keyLog = document.getElementById('keyLog');
 
-        // Event listener to capture key press
-        window.addEventListener('keydown', function(event) {
-            keyDisplay.textContent = `You pressed: ${event.key}`;
-            keyOutput.textContent = `Key: ${event.key} (Code: ${event.keyCode})`;
-            keyOutput.textContent = `Key: ${event.key} (Code: ${event.code})`;
+        const pressedKeys = new Set();
+        const keySequence = [];
+
+        const specialKeys = {
+            " ": "Space",
+            "Enter": "Enter ↩",
+            "Tab": "Tab ⇥",
+            "Shift": "Shift ⇧",
+            "Control": "Ctrl ⌃",
+            "Alt": "Alt ⌥",
+            "Meta": "Meta ⌘",
+            "ArrowUp": "↑",
+            "ArrowDown": "↓",
+            "ArrowLeft": "←",
+            "ArrowRight": "→"
+        };
+
+        window.addEventListener('keydown', (event) => {
+            // Avoid repeat triggers when key is held down
+            if (pressedKeys.has(event.code)) return;
+            pressedKeys.add(event.code);
+
+            const displayKey = specialKeys[event.key] || event.key;
+
+            keyDisplay.textContent = `You pressed: ${displayKey}`;
+            keyOutput.textContent = `Key: ${displayKey} (KeyCode: ${event.keyCode}, Code: ${event.code})`;
             keyDisplay.classList.add('pressed');
 
-            // Display modifier key information
-            let modifiers = [];
+            // Display modifiers
+            const modifiers = [];
             if (event.shiftKey) modifiers.push("Shift");
             if (event.ctrlKey) modifiers.push("Ctrl");
             if (event.altKey) modifiers.push("Alt");
             if (event.metaKey) modifiers.push("Meta");
-            modifierInfo.textContent = modifiers.length ? `Modifiers: ${modifiers.join(", ")}` : "No modifiers pressed";
+            modifierInfo.textContent = modifiers.length
+                ? `Modifiers: ${modifiers.join(", ")}`
+                : "No modifiers pressed";
+
+            // Log sequence (up to last 20 keys)
+            keySequence.push(displayKey);
+            if (keySequence.length > 20) keySequence.shift();
+            keyLog.textContent = `Key Sequence: ${keySequence.join(" ")}`;
         });
-        // Event listener to reset the key display when key is released
-        window.addEventListener('keyup', function(event) {
+
+        window.addEventListener('keyup', (event) => {
+            pressedKeys.delete(event.code);
             keyDisplay.classList.remove('pressed');
         });
 
-        // Reset button functionality
-        resetButton.addEventListener('click', function() {
+        // Reset everything
+        resetButton.addEventListener('click', () => {
             keyDisplay.textContent = "Press a Key";
             keyOutput.textContent = "";
             modifierInfo.textContent = "No modifiers pressed";
             keyDisplay.classList.remove('pressed');
+            keySequence.length = 0;
+            keyLog.textContent = "Key Sequence: (none yet)";
+            pressedKeys.clear();
         });
     </script>
-
 </body>
 </html>
