@@ -74,6 +74,20 @@
             color: #00695c;
             word-wrap: break-word;
         }
+        .toggle-sound {
+            margin-top: 15px;
+            background-color: #009688;
+            border: none;
+            color: white;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .toggle-sound:hover {
+            background-color: #00796b;
+        }
     </style>
 </head>
 <body>
@@ -83,7 +97,9 @@
     <div class="key" id="keyDisplay" role="status" aria-live="assertive" aria-label="Key Display">Press a Key</div>
     <div class="output" id="keyOutput" role="status" aria-live="assertive"></div>
     <div class="modifier-info" id="modifierInfo" aria-label="Modifier Keys Information">No modifiers pressed</div>
+
     <button class="reset-btn" id="resetButton">Reset</button>
+    <button class="toggle-sound" id="soundToggle">🔊 Sound: On</button>
 
     <div class="key-log" id="keyLog">Key Sequence: (none yet)</div>
 
@@ -93,9 +109,31 @@
         const modifierInfo = document.getElementById('modifierInfo');
         const resetButton = document.getElementById('resetButton');
         const keyLog = document.getElementById('keyLog');
+        const soundToggle = document.getElementById('soundToggle');
 
         const pressedKeys = new Set();
         const keySequence = [];
+        let soundEnabled = true;
+
+        // Create audio context for sound generation
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playClickSound() {
+            if (!soundEnabled) return;
+
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.type = 'square';
+            oscillator.frequency.value = 440; // frequency in Hz (A4 tone)
+            gainNode.gain.value = 0.05; // volume (small for soft click)
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.05); // short blip
+        }
 
         const specialKeys = {
             " ": "Space",
@@ -121,6 +159,8 @@
             keyDisplay.textContent = `You pressed: ${displayKey}`;
             keyOutput.textContent = `Key: ${displayKey} (KeyCode: ${event.keyCode}, Code: ${event.code})`;
             keyDisplay.classList.add('pressed');
+
+            playClickSound();
 
             // Display modifiers
             const modifiers = [];
@@ -152,6 +192,12 @@
             keySequence.length = 0;
             keyLog.textContent = "Key Sequence: (none yet)";
             pressedKeys.clear();
+        });
+
+        // Toggle sound on/off
+        soundToggle.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            soundToggle.textContent = soundEnabled ? "🔊 Sound: On" : "🔇 Sound: Off";
         });
     </script>
 </body>
